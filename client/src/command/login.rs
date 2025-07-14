@@ -17,6 +17,9 @@ pub struct Login {
     /// Access token.
     token: Option<String>,
 
+    /// Cloudflare token
+    origin_token: Option<String>,
+
     /// Set the server as the default.
     #[clap(long)]
     set_default: bool,
@@ -48,7 +51,7 @@ pub async fn run(opts: Opts) -> Result<()> {
                     .token
                     .to_owned()
                     .map(|token| ServerTokenConfig::Raw { token }),
-                origin_token: String::new()
+                origin_token: sub.origin_token.to_owned()
             },
         );
     }
