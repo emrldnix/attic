@@ -48,6 +48,7 @@ pub async fn run(opts: Opts) -> Result<()> {
                     .token
                     .to_owned()
                     .map(|token| ServerTokenConfig::Raw { token }),
+                origin_token: String::new()
             },
         );
     }
