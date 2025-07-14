@@ -62,7 +62,7 @@ pub struct StructuredApiError {
 
 impl ApiClient {
     pub fn from_server_config(config: ServerConfig) -> Result<Self> {
-        let client = build_http_client(config.token()?.as_deref());
+        let client = build_http_client(config.token()?.as_deref(), config.origin_token);
 
         Ok(Self {
             endpoint: Url::parse(&config.endpoint)?,
@@ -235,12 +235,15 @@ impl fmt::Display for StructuredApiError {
     }
 }
 
-fn build_http_client(token: Option<&str>) -> HttpClient {
+fn build_http_client(token: Option<&str>, origin_token: String) -> HttpClient {
     let mut headers = HeaderMap::new();
 
     if let Some(token) = token {
         let auth_header = HeaderValue::from_str(&format!("bearer {}", token)).unwrap();
+        let origin_header = HeaderValue::from_str(&origin_token).unwrap();
+
         headers.insert(AUTHORIZATION, auth_header);
+        headers.insert("X-Cloudflare-Secret", origin_header);
     }
 
     reqwest::Client::builder()

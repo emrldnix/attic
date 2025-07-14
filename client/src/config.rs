@@ -54,6 +54,8 @@ pub struct ServerConfig {
     pub endpoint: String,
     #[serde(flatten)]
     pub token: Option<ServerTokenConfig>,
+    #[serde(rename = "origin-token")]
+    pub origin_token: String,
 }
 
 impl ServerConfig {
